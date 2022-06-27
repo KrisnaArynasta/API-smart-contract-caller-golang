@@ -9,7 +9,6 @@ import (
 
     "github.com/ethereum/go-ethereum/common"
     "github.com/labstack/echo/v4"
-    //"github.com/gorilla/mux"
     SmartContractCaller "smartcontractcallermodule"
 )
 
@@ -51,9 +50,8 @@ type DataResTransaction struct {
 
 func main(){
     
-    //callerPrivateKeyString := "PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz"//"PrivateKey-uVPEjPMvVthUgbQy6g9eg5qkedWtXjFwtApeViGPPMvmCmjwx"
-
-    //decimalBalance := decimalBalance(smartContractAddress, getRpcURL())
+    //"PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz"
+    //"PrivateKey-uVPEjPMvVthUgbQy6g9eg5qkedWtXjFwtApeViGPPMvmCmjwx"
 
     route := echo.New()
 	route.GET("/", func(c echo.Context) error {
@@ -76,7 +74,7 @@ func rpcURL() string {
 }
 
 func smartContractAddress() string {
-    //smartContractAddress := "0x836F91Ab1aE172958E494e8407B0F88d05166A03" //KEPENG TOKEN
+    //"0x836F91Ab1aE172958E494e8407B0F88d05166A03" //KEPENG TOKEN (MAIN NET)
     return "0xCDE8A483758CA28a78267fc13832aB31b88F78C1" //KRISNA TOKEN
 }
 
