@@ -50,8 +50,9 @@ type DataResTransaction struct {
 
 func main(){
     
-    //"PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz"
-    //"PrivateKey-uVPEjPMvVthUgbQy6g9eg5qkedWtXjFwtApeViGPPMvmCmjwx"
+    //"PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz" //Krisna Walet Avalanche
+    //"PrivateKey-uVPEjPMvVthUgbQy6g9eg5qkedWtXjFwtApeViGPPMvmCmjwx" //Krisna Walet Metamask
+    //"PrivateKey-v9CgXqT77DgJjWNLLpJP5td7v2DjPrdMTEsK6sCDjBGoRcisz" //Kepeng Wallet
 
     route := echo.New()
 	route.GET("/", func(c echo.Context) error {
@@ -75,7 +76,9 @@ func rpcURL() string {
 
 func smartContractAddress() string {
     //"0x836F91Ab1aE172958E494e8407B0F88d05166A03" //KEPENG TOKEN (MAIN NET)
-    return "0xCDE8A483758CA28a78267fc13832aB31b88F78C1" //KRISNA TOKEN
+    //0xeccd68E23CA0D0DD2184F20Db728BA08339FE602 //KEPENG TOKEN (TESTNET NET)
+    //"0xCDE8A483758CA28a78267fc13832aB31b88F78C1" //KRISNA TOKEN
+    return "0xeccd68E23CA0D0DD2184F20Db728BA08339FE602"
 }
 
 func decimalBalance(smartContractAddress string, rpcURL string) *big.Int{
