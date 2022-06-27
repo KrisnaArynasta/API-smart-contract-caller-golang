@@ -45,7 +45,6 @@ type DataResAllowance struct {
     Allowance         *big.Int `json:"allowance"`
 }
 
-
 type DataResTransaction struct {
     TransactionHash     string  `json:"transaction_hash"`
 }
