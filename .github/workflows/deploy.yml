@@ -29,7 +29,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: betamax
           password: ${{ secrets.SSH_PASSPHRASE }}
-          script: -ls
+          script: ls
         env:
           CI: true  
 
