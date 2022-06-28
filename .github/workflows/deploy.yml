@@ -23,15 +23,17 @@ jobs:
           server-dir: ./public_html/   
 
       - name: SSH Run PM2
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@master
         with:
-          command: go build home/betamax/web/api-staging.betamax.co/public_html/SmartContractAPI.go
-          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          host: ${{ secrets.SSH_HOSTS }}
+          port: ${{ secrets.SSH_PORT }}
           username: betamax
-          password: ${{ secrets.PASSPHRASE }}
+          password: ${{ secrets.SSH_PASSPHRASE }}
+          script: -ls
         env:
           CI: true  
 
+      # go build home/betamax/web/api-staging.betamax.co/public_html/SmartContractAPI.go
       # - name: ⚙️ Set up SSH
       #   run: |
       #     mkdir -p ~/.ssh/
