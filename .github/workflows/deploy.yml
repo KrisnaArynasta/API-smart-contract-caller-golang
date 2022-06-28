@@ -35,7 +35,7 @@ jobs:
         env:
           CI: true
 
-      - name: 🏃🏽‍♂️ Run PM2
+      - name: 🏃🏻 Run PM2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOSTS }}
