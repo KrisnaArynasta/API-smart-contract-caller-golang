@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DEPLOY_STAGING_KEY }}
           server-dir: ./public_html/   
 
-      - name: Build Go File
+      - name: 🔧 Build Go File
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOSTS }}
@@ -35,7 +35,7 @@ jobs:
         env:
           CI: true
 
-      - name: Run PM2
+      - name: 🏃🏽‍♂️ Run PM2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOSTS }}
@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             pm2 stop api-betamax-smartcontract
-            pm2 start smartContractAPI --name "api-betamax-smartcontract"
+            pm2 start ./smartContractAPI --name api-betamax-smartcontract
         env:
           CI: true
 
