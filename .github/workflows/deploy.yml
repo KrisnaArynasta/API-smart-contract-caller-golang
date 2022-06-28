@@ -22,8 +22,10 @@ jobs:
           password: ${{ secrets.DEPLOY_STAGING_KEY }}
           server-dir: ./public_html/
       
-      - name: 🏃🏻 Run Go
-      - uses: actions/setup-go@v3
+      - name: ⚙️ Setup Go
+        uses: actions/setup-go@v3
         with:
           go-version: '1.18'
-      - run: go run .    
+
+      - name: 🏃🏻 Run Go
+        run: go run .    
