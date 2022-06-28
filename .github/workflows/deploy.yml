@@ -29,7 +29,9 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: betamax
           password: ${{ secrets.SSH_PASSPHRASE }}
-          script: go build home/betamax/web/api-staging.betamax.co/public_html/SmartContractAPI.go
+          script: |
+            cd /home/betamax/web/api-staging.betamax.co/public_html
+            /usr/local/go/bin/go build
         env:
           CI: true  
 
