@@ -52,7 +52,7 @@ func main(){
 
     route := echo.New()
 	route.GET("/", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, "jangan Lihat!")
+		return c.JSON(http.StatusOK, "Welcome to Betamax API. To see our documentation please contact our developer!")
 	})
 
     route.GET("/getgassprice", getGassPrice)
