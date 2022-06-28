@@ -12,9 +12,6 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v2
 
-      - name: Run Golang
-        run: go run .
-
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -24,3 +21,9 @@ jobs:
           username: betamax_betamax_apitestnet
           password: ${{ secrets.DEPLOY_STAGING_KEY }}
           server-dir: ./public_html/
+      
+      - name: 🏃🏻 Run Go
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+      - run: go run .    
