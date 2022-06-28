@@ -49,10 +49,6 @@ type DataResTransaction struct {
 }
 
 func main(){
-    
-    //"PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz" //Krisna Walet Avalanche
-    //"PrivateKey-uVPEjPMvVthUgbQy6g9eg5qkedWtXjFwtApeViGPPMvmCmjwx" //Krisna Walet Metamask
-    //"PrivateKey-v9CgXqT77DgJjWNLLpJP5td7v2DjPrdMTEsK6sCDjBGoRcisz" //Kepeng Wallet
 
     route := echo.New()
 	route.GET("/", func(c echo.Context) error {
@@ -81,8 +77,7 @@ func smartContractAddress() string {
     return "0xeccd68E23CA0D0DD2184F20Db728BA08339FE602"
 }
 
-func decimalBalance(smartContractAddress string, rpcURL string) *big.Int{
-    callerPrivateKeyString := "PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz"
+func decimalBalance(smartContractAddress string, rpcURL string, callerPrivateKeyString string) *big.Int{
 	traDecimals, err := SmartContractCaller.GetTokenDecimal(smartContractAddress, rpcURL, callerPrivateKeyString)
     if(err != ""){
         fmt.Println("error \t \t:",err)
@@ -146,7 +141,6 @@ func getTokenInfo(c echo.Context) error {
 
     smartContractAddress := smartContractAddress();
     rpcURL := rpcURL();
-    //callerPrivateKeyString := "PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz"
     callerPrivateKeyString := c.QueryParam("PrivateKey")
     if(callerPrivateKeyString == "" || len(callerPrivateKeyString) == 0){
         res.Message = "Caller credential is not valid"
@@ -188,7 +182,6 @@ func getAddressBalance(c echo.Context) error {
 
     smartContractAddress := smartContractAddress();
     rpcURL := rpcURL();
-    decimalBalance := decimalBalance(smartContractAddress, rpcURL)
 
     callerPrivateKeyString := c.QueryParam("PrivateKey")
     if(callerPrivateKeyString == "" || len(callerPrivateKeyString) == 0){
@@ -203,6 +196,7 @@ func getAddressBalance(c echo.Context) error {
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
 
+    decimalBalance := decimalBalance(smartContractAddress, rpcURL, callerPrivateKeyString)
 	traAddrBlnc, err := SmartContractCaller.GetAddressBalance(smartContractAddress, rpcURL, callerPrivateKeyString, holderAddress)
     if(err != ""){
         res.Message = err
@@ -231,7 +225,6 @@ func getAllowance(c echo.Context) error {
 
     smartContractAddress := smartContractAddress();
     rpcURL := rpcURL();
-    decimalBalance := decimalBalance(smartContractAddress, rpcURL)
 
     callerPrivateKeyString := c.QueryParam("PrivateKey")
     if(callerPrivateKeyString == "" || len(callerPrivateKeyString) == 0){
@@ -239,12 +232,15 @@ func getAllowance(c echo.Context) error {
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
+    decimalBalance := decimalBalance(smartContractAddress, rpcURL, callerPrivateKeyString)
+
 	ownerAddress := c.QueryParam("Owner")
     if(ownerAddress == "" || len(ownerAddress) == 0){
         res.Message = "Holder Caller credential is not valid"
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
+
 	spenderAddress := c.QueryParam("Spender")
     if(spenderAddress == "" || len(spenderAddress) == 0){
         res.Message = "Holder Caller credential is not valid"
@@ -281,7 +277,6 @@ func transfer(c echo.Context) error {
 
     smartContractAddress := smartContractAddress();
     rpcURL := rpcURL();
-    decimalBalance := decimalBalance(smartContractAddress, rpcURL)
 
     //context.Request().Header
     callerPrivateKeyString := c.FormValue("PrivateKey")
@@ -290,12 +285,15 @@ func transfer(c echo.Context) error {
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
+    decimalBalance := decimalBalance(smartContractAddress, rpcURL, callerPrivateKeyString)
+
 	recipient := c.FormValue("Recipient")
     if(recipient == "" || len(recipient) == 0){
         res.Message = "Holder Caller credential is not valid"
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
+    
     amount := new(big.Int)
     amount.SetString(c.FormValue("amount"), 10)
     if(len(amount.Bits()) == 0){
@@ -334,7 +332,6 @@ func approve(c echo.Context) error {
 
     smartContractAddress := smartContractAddress();
     rpcURL := rpcURL();
-    decimalBalance := decimalBalance(smartContractAddress, rpcURL)
 
     //context.Request().Header
     callerPrivateKeyString := c.FormValue("PrivateKey")
@@ -343,12 +340,15 @@ func approve(c echo.Context) error {
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
+    decimalBalance := decimalBalance(smartContractAddress, rpcURL, callerPrivateKeyString)
+
     spender := c.FormValue("Spender")
     if(spender == "" || len(spender) == 0){
         res.Message = "Holder Caller credential is not valid"
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
+
     amount := new(big.Int)
     amount.SetString(c.FormValue("amount"), 10)
     if(len(amount.Bits()) == 0){
@@ -381,7 +381,6 @@ func approve(c echo.Context) error {
 }
 
 // func transferFrom(smartContractAddress string, rpcURL string, decimalBalance *big.Int){
-//     callerPrivateKeyString := "PrivateKey-tvYwRHzhBX9p9D2oYsYQxDxozLqAhvPBR5hWhXmmHDmadMgiz"
 // 	sender := "0x3f75899e56b639106205c78a4e64c6a3c1e68b5e"
 // 	recipient := "0xACd458287AE86e7B35050e398E361FAAc6b949AC"
 //     amount := big.NewInt(12);
