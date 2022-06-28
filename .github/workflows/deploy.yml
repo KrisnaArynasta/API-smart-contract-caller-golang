@@ -15,7 +15,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: aragorn.helinium.net
+          server: vmi875062.contaboserver.net
           port: 21
           protocol: ftp
           username: betamax_betamax_apitestnet
