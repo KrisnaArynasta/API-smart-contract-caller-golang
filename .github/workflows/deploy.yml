@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - master
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    concurrency: master
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: aragorn.helinium.net
+          port: 21
+          protocol: ftp
+          username: betamax_betamax_apitestnet
+          password: ${{ secrets.DEPLOY_STAGING_KEY }}
+          server-dir: ./public_html/

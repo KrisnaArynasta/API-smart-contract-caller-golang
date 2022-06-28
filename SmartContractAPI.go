@@ -28,8 +28,8 @@ type DataResCallerPubAddress struct {
 
 type DataResTokenInfo struct {
     TokenName          string   `json:"toke_name"`
-    TokenDecimals      string   `json:"token_decimals"`
     TokenSymbol        string   `json:"token_symbol"`
+    TokenDecimals      string   `json:"token_decimals"`
     TotalSupply        *big.Int `json:"total_supply"`
 }
 
@@ -167,13 +167,13 @@ func getTokenInfo(c echo.Context) error {
     }
 
     fmt.Println("Token Name \t \t:",traName)
-    fmt.Println("Token Decimals \t \t:",traDecimals)
     fmt.Println("Token Symbol \t \t:",traSym)
+    fmt.Println("Token Decimals \t \t:",traDecimals)
     fmt.Println("Total Supply \t \t:",traTtlSup)
 
     data.TokenName = traName
-    data.TokenDecimals = traDecimals
     data.TokenSymbol = traSym
+    data.TokenDecimals = traDecimals
     data.TotalSupply = traTtlSup
     res.Data = data
 	res.Message = "success"
