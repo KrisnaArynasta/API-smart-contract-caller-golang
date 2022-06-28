@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DEPLOY_STAGING_KEY }}
           server-dir: ./public_html/   
 
-      - name: SSH Run PM2
+      - name: Build Go File
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOSTS }}
@@ -33,7 +33,20 @@ jobs:
             cd /home/betamax/web/api-staging.betamax.co/public_html
             /usr/local/go/bin/go build
         env:
-          CI: true  
+          CI: true
+
+      - name: Run PM2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOSTS }}
+          port: ${{ secrets.SSH_PORT }}
+          username: betamax
+          password: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            pm2 stop api-betamax-smartcontract
+            pm2 start smartContractAPI --name "api-betamax-smartcontract"
+        env:
+          CI: true
 
       # go build home/betamax/web/api-staging.betamax.co/public_html/SmartContractAPI.go
       # - name: ⚙️ Set up SSH
