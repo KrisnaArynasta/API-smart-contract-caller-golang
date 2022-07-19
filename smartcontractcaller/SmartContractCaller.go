@@ -47,16 +47,39 @@ func configSC(smartContractAddress string, rpcURL string, callerPrivateKeyString
     // }
 
     // parse key
-    callerPrivateKeyBytes, err := formatting.Decode(formatting.CB58, strings.TrimPrefix(callerPrivateKeyString, "PrivateKey-"/*constants.SecretKeyPgorefix*/))
+    callerPrivateKeyBytes, err := formatting.Decode(formatting.CB58, "")
     if err != nil {
         fmt.Println(err)
         return nil, nil, err
     }
+        
     callerPrivateKey := secp256k1.PrivKeyFromBytes(callerPrivateKeyBytes)
     callerPrivateKeyECDSA := callerPrivateKey.ToECDSA()
+    cAddress := crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey);
+
+    if(strings.Contains(callerPrivateKeyString,"PrivateKey-")){
+        callerPrivateKeyBytes, err = formatting.Decode(formatting.CB58, strings.TrimPrefix(callerPrivateKeyString, "PrivateKey-"/*constants.SecretKeyPgorefix*/))
+        if err != nil {
+            fmt.Println(err)
+            return nil, nil, err
+        }
+        
+        callerPrivateKey = secp256k1.PrivKeyFromBytes(callerPrivateKeyBytes)
+        callerPrivateKeyECDSA = callerPrivateKey.ToECDSA()
+
+        cAddress = crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey)
+
+    }else{
+        callerPrivateKeyECDSA, err = crypto.HexToECDSA(callerPrivateKeyString)
+        if err != nil {
+            fmt.Println(err)
+            return nil, nil, err
+        }
+        
+        cAddress = crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey)
+    }
 
     // derive 'c' address
-    cAddress := crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey)
     nonce, err := client.PendingNonceAt(ctx, cAddress)
 
     scAddress := common.HexToAddress(smartContractAddress)
