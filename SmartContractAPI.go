@@ -72,7 +72,7 @@ func rpcURL() string {
 
 func smartContractAddress() string {
     //"0x836F91Ab1aE172958E494e8407B0F88d05166A03" //KEPENG TOKEN (MAIN NET)
-    //0xeccd68E23CA0D0DD2184F20Db728BA08339FE602 //KEPENG TOKEN (TESTNET NET)
+    //0xeccd68E23CA0D0DD2184F20Db728BA08339FE602 //KEPENG TOKEN (TEST NET)
     //"0xCDE8A483758CA28a78267fc13832aB31b88F78C1" //KRISNA TOKEN
     return "0xeccd68E23CA0D0DD2184F20Db728BA08339FE602"
 }
@@ -122,6 +122,7 @@ func getCallerPubAddress(c echo.Context) error {
         res.Status = http.StatusUnauthorized
 
         fmt.Println("error \t \t \t:",callerPubAddress)
+        return echo.NewHTTPError(http.StatusUnauthorized, res)
     }else{
         data.PubAddress = callerPubAddress
         res.Data = data
@@ -129,10 +130,8 @@ func getCallerPubAddress(c echo.Context) error {
         res.Status = http.StatusOK
         
         fmt.Println("Caller Pub Address \t:", callerPubAddress)
+        return c.JSON(http.StatusOK, res)
     }
-    
-
-    return c.JSON(http.StatusOK, res)
 }
 
 func getTokenInfo(c echo.Context) error {

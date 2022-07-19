@@ -103,22 +103,39 @@ func GetGassPrice(rpcURL string) *big.Int{
 }
 
 func GetCallerPubAddress(callerPrivateKeyString string) string{
+
+    if(strings.Contains(callerPrivateKeyString,"PrivateKey-")){
+        callerPrivateKeyBytes, err := formatting.Decode(formatting.CB58, strings.TrimPrefix(callerPrivateKeyString, "PrivateKey-"/*constants.SecretKeyPgorefix*/))
+        if err != nil {
+            return err.Error()
+        }
+        
+        callerPrivateKey := secp256k1.PrivKeyFromBytes(callerPrivateKeyBytes)
+        callerPrivateKeyECDSA := callerPrivateKey.ToECDSA()
+            
+        // derive 'c' address
+        cAddress := crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey)
+        if err != nil {
+            //fmt.Println(err)
+            return err.Error()
+        }
+
+        return cAddress.String()
+
+    }else{
+        callerPrivateKeyECDSA, err := crypto.HexToECDSA(callerPrivateKeyString)
+        if err != nil {
+            return err.Error()
+        }
+        // derive 'c' address
+        cAddress := crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey)
+        if err != nil {
+            //fmt.Println(err)
+            return err.Error()
+        }
     
-    callerPrivateKeyBytes, err := formatting.Decode(formatting.CB58, strings.TrimPrefix(callerPrivateKeyString, "PrivateKey-"/*constants.SecretKeyPgorefix*/))
-    if err != nil {
-        return err.Error()
+        return cAddress.String()
     }
-    callerPrivateKey := secp256k1.PrivKeyFromBytes(callerPrivateKeyBytes)
-    callerPrivateKeyECDSA := callerPrivateKey.ToECDSA()
-
-    // derive 'c' address
-    cAddress := crypto.PubkeyToAddress(callerPrivateKeyECDSA.PublicKey)
-    if err != nil {
-        //fmt.Println(err)
-        return err.Error()
-    }
-
-    return cAddress.String()
 }
 
 func GetTokenInfo(smartContractAddress string, rpcURL string, callerPrivateKeyString string) (string, string, string, *big.Int, string) {
