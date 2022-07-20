@@ -5,7 +5,7 @@ import (
     "math/big"
     "net/http"
     "strings"
-    // "strconv"
+    "strconv"
 
     "github.com/ethereum/go-ethereum/common"
     "github.com/labstack/echo/v4"
@@ -66,15 +66,25 @@ func main(){
 	route.Logger.Fatal(route.Start(":3725"))
 }
 
-func rpcURL() string {
-    return "https://api.avax-test.network/ext/bc/C/rpc" //"https://api.avax.network/ext/bc/C/rpc"
+func rpcURL(isMainNet bool) string {
+    if(isMainNet == true){
+        return "https://api.avax.network/ext/bc/C/rpc"
+    }else{
+        return "https://api.avax-test.network/ext/bc/C/rpc"
+    }
+     
 }
 
-func smartContractAddress() string {
+func smartContractAddress(isMainNet bool) string {
     //"0x836F91Ab1aE172958E494e8407B0F88d05166A03" //KEPENG TOKEN (MAIN NET)
     //0xeccd68E23CA0D0DD2184F20Db728BA08339FE602 //KEPENG TOKEN (TEST NET)
     //"0xCDE8A483758CA28a78267fc13832aB31b88F78C1" //KRISNA TOKEN
-    return "0xeccd68E23CA0D0DD2184F20Db728BA08339FE602"
+   
+    if(isMainNet == true){
+        return "0x836F91Ab1aE172958E494e8407B0F88d05166A03"
+    }else{
+        return "0xeccd68E23CA0D0DD2184F20Db728BA08339FE602"
+    }
 }
 
 func decimalBalance(smartContractAddress string, rpcURL string, callerPrivateKeyString string) *big.Int{
@@ -88,7 +98,8 @@ func decimalBalance(smartContractAddress string, rpcURL string, callerPrivateKey
 }
 
 func getGassPrice(c echo.Context) error {
-    rpcURL := rpcURL();
+    isMainNet, _ := strconv.ParseBool(c.QueryParam("isMainNet"))
+    rpcURL := rpcURL(isMainNet);
     gasPrice := SmartContractCaller.GetGassPrice(rpcURL)
     gasPriceStr := gasPrice.String()
 
@@ -138,8 +149,9 @@ func getTokenInfo(c echo.Context) error {
     var res Response
     var data DataResTokenInfo
 
-    smartContractAddress := smartContractAddress();
-    rpcURL := rpcURL();
+    isMainNet, _ := strconv.ParseBool(c.QueryParam("isMainNet"))
+    smartContractAddress := smartContractAddress(isMainNet);
+    rpcURL := rpcURL(isMainNet);
     callerPrivateKeyString := c.QueryParam("PrivateKey")
     if(callerPrivateKeyString == "" || len(callerPrivateKeyString) == 0){
         res.Message = "Caller credential is not valid"
@@ -179,8 +191,9 @@ func getAddressBalance(c echo.Context) error {
     var res Response
     var data DataResAddressBalance
 
-    smartContractAddress := smartContractAddress();
-    rpcURL := rpcURL();
+    isMainNet, _ := strconv.ParseBool(c.QueryParam("isMainNet"))
+    smartContractAddress := smartContractAddress(isMainNet);
+    rpcURL := rpcURL(isMainNet);
 
     callerPrivateKeyString := c.QueryParam("PrivateKey")
     if(callerPrivateKeyString == "" || len(callerPrivateKeyString) == 0){
@@ -222,8 +235,9 @@ func getAllowance(c echo.Context) error {
     var res Response
     var data DataResAllowance
 
-    smartContractAddress := smartContractAddress();
-    rpcURL := rpcURL();
+    isMainNet, _ := strconv.ParseBool(c.QueryParam("isMainNet"))
+    smartContractAddress := smartContractAddress(isMainNet);
+    rpcURL := rpcURL(isMainNet);
 
     callerPrivateKeyString := c.QueryParam("PrivateKey")
     if(callerPrivateKeyString == "" || len(callerPrivateKeyString) == 0){
@@ -274,8 +288,9 @@ func transfer(c echo.Context) error {
     var res Response
     var data DataResTransaction
 
-    smartContractAddress := smartContractAddress();
-    rpcURL := rpcURL();
+    isMainNet, _ := strconv.ParseBool(c.QueryParam("isMainNet"))
+    smartContractAddress := smartContractAddress(isMainNet);
+    rpcURL := rpcURL(isMainNet);
 
     //context.Request().Header
     callerPrivateKeyString := c.FormValue("PrivateKey")
@@ -329,8 +344,9 @@ func approve(c echo.Context) error {
     var res Response
     var data DataResTransaction
 
-    smartContractAddress := smartContractAddress();
-    rpcURL := rpcURL();
+    isMainNet, _ := strconv.ParseBool(c.QueryParam("isMainNet"))
+    smartContractAddress := smartContractAddress(isMainNet);
+    rpcURL := rpcURL(isMainNet);
 
     //context.Request().Header
     callerPrivateKeyString := c.FormValue("PrivateKey")
