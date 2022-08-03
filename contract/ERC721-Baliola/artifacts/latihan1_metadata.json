@@ -1,0 +1,36 @@
+{
+	"compiler": {
+		"version": "0.4.26+commit.4563c3fc"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"latihan1.sol": "latihan1"
+		},
+		"evmVersion": "byzantium",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"latihan1.sol": {
+			"keccak256": "0x4416cb1ea19c905b24fea76388fed5418429da44f480a5870179d6ab104da534",
+			"urls": [
+				"bzzr://25b0d49ae49d5167d0cf39aaea8701ed942489ec1f557e3c2e4bba2603b547a8"
+			]
+		}
+	},
+	"version": 1
+}

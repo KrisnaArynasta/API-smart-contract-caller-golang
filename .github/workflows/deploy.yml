@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             pm2 stop api-betamax-smartcontract
-            pm2 start /home/betamax/web/api-staging.betamax.co/public_html/smartContractAPI --name api-betamax-smartcontract
+            pm2 start /home/betamax/web/api-staging.betamax.co/public_html/main --name api-betamax-smartcontract
         env:
           CI: true
 
