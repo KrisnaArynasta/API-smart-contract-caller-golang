@@ -31,7 +31,7 @@ jobs:
           password: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /home/betamax/web/api-staging.betamax.co/public_html
-            /usr/local/go/bin/go build 
+            /usr/local/go/bin/go build
         env:
           CI: true
 
