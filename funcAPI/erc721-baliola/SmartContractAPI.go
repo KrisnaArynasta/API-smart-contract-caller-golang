@@ -299,7 +299,7 @@ func Transfer(c echo.Context) error {
 	traTransfer, err := SmartContractCaller.TransferFrom(smartContractAddress, rpcURL, callerPrivateKeyString, sender, recipient, tokenId)
     if(err != ""){
         res.Message = err
-        if(strings.Contains(err, "invalid input checksum") || strings.Contains(err, "Invalid base58 digit")){
+        if(strings.Contains(err, "invalid input checksum") || strings.Contains(err, "Invalid base58 digit") || strings.Contains(err, "invalid hex character")){
             res.Message = "Caller credential is not valid"
         }
 
