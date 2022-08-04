@@ -165,6 +165,9 @@ func GetAddressBalance(smartContractAddress string, rpcURL string, callerPrivate
 
 func TransferFrom(smartContractAddress string, rpcURL string, callerPrivateKeyString string, sender string, recipient string, tokenId *big.Int) (string, string){
     tx, contract, err := configSC(smartContractAddress, rpcURL, callerPrivateKeyString)
+    if err != nil {
+        return "", err.Error()
+    }
     
     //send token from and to specific address
     traTransferFrom, err := contract.TransferFrom(

@@ -151,6 +151,9 @@ func GetAddressBalance(smartContractAddress string, rpcURL string, callerPrivate
 
 func SafeTransferFrom(smartContractAddress string, rpcURL string, callerPrivateKeyString string, sender string, recipient string, tokenId *big.Int, amount *big.Int) (string, string){
     tx, contract, err := configSC(smartContractAddress, rpcURL, callerPrivateKeyString)
+    if err != nil {
+        return "", err.Error()
+    }
     
     traExists, err := contract.Exists(&bind.CallOpts{}, tokenId)
     if err != nil {
