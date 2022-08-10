@@ -35,7 +35,7 @@ type DataResTokenInfo struct {
 
 type DataResAddressBalance struct {
     Address             string  `json:"pub_address"`
-    Balance             *big.Int `json:"balance"`
+    Balance             *big.Float `json:"balance"`
 }
 
 type DataResAllowance struct {
@@ -207,12 +207,12 @@ func GetAddressBalance(c echo.Context) error {
     }
 
     data.Address = holderAddress
-    data.Balance = new(big.Int).Div(traAddrBlnc,decimalBalance)
+    data.Balance = new(big.Float).Quo(new(big.Float).SetInt(traAddrBlnc),new(big.Float).SetInt(decimalBalance))
     res.Data = data
 	res.Message = "success"
     res.Status = http.StatusOK
 
-    fmt.Printf("Saldo \t \t \t: %d (%s)\n",new(big.Int).Div(traAddrBlnc,decimalBalance), common.HexToAddress(holderAddress))
+    fmt.Printf("Saldo \t \t \t: %d (%s)\n",traAddrBlnc, common.HexToAddress(holderAddress))
     return c.JSON(http.StatusOK, res)
 }
 
@@ -293,16 +293,26 @@ func Transfer(c echo.Context) error {
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
     
-    amount := new(big.Int)
-    amount.SetString(c.FormValue("amount"), 10)
-    if(len(amount.Bits()) == 0){
+    //jadiin big int param dari post
+    // amount := new(big.Int)
+    // amount.SetString(c.FormValue("amount"), 10)
+    amount, _ := strconv.ParseFloat(c.FormValue("amount"), 64)
+    
+    //jadiin float decimal token dan amount, trus d kali antara param amount dan decimal
+    amountFloat := new(big.Float)
+    amountFloat.Mul(new(big.Float).SetFloat64(amount), new(big.Float).SetInt(decimalBalance))
+
+    //hasil perkalian dijadiin big int
+    amountBigInt := new(big.Int)
+    amountFloat.Int(amountBigInt)
+    fmt.Println(amountBigInt)
+    if(len(amountBigInt.Bits()) == 0){
         res.Message = "amount must bigger than 0"
         res.Status = http.StatusUnauthorized
         return echo.NewHTTPError(http.StatusUnauthorized, res)
     }
-    amount.Mul(amount,decimalBalance)
 
-	traTransfer, err := SmartContractCaller.Transfer(smartContractAddress, rpcURL, callerPrivateKeyString, recipient, amount)
+	traTransfer, err := SmartContractCaller.Transfer(smartContractAddress, rpcURL, callerPrivateKeyString, recipient, amountBigInt)
     if(err != ""){
         res.Message = err
         if(strings.Contains(err, "invalid input checksum") || strings.Contains(err, "Invalid base58 digit")){
